@@ -1,0 +1,2 @@
+defmodule Confs do
+end
