@@ -1,7 +1,7 @@
 defmodule CliTest do
   use ExUnit.Case
-  import Confs.CLI, only: [ parse_args: 1, process: 1, transform: 1 ]
-  import ConfreaksJson, only: [ fixture: 1 ]
+  import Confs.CLI, only: [ execute: 1, parse_args: 1 ]
+  import ServicesJson, only: [ fixture: 1 ]
   #import ExUnit.CaptureIO
 
   test ":help returned by option parsing with -h and --help options" do
@@ -25,16 +25,12 @@ defmodule CliTest do
     assert parse_args([ "confreaks" ]) == :help
   end
 
-  test "return :ok, :confreaks and json payload" do
-    assert process({:confreaks, "rubyconf2015"}) == {:ok, :confreaks, "{}"}
+  test "return a map with Confreaks' videos info" do
+    assert execute({:confreaks, "rubyconf2014"}) == fixture(:confreaks_videos_list)
   end
 
-  test "transform confreaks json into confs map" do
-    assert transform({:ok, :confreaks, fixture(:events_json)}) == fixture(:videos_list)
-  end
-
-  test "return :ok, :youtube and json payload" do
-    assert process({:youtube, "PLSD48HvrE7-bo9rWaCLjxAocrxREREHnt"}) =={:ok, :youtube, "{}"}
+  test "return a map with Youtube's videos info" do
+    assert execute({:youtube, "PLSD48HvrE7"}) == fixture(:youtube_videos_list)
   end
 
   #test "help message" do
